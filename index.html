@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Convertidor masivo de imágenes a WebP y AVIF. Procesamiento 100% local en tu navegador.">
+  <title>Convertidor de Imágenes · WebP / AVIF</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Convertidor de Imágenes</h1>
+    <p class="subtitle">Convierte entre <strong>JPG · PNG · WebP · AVIF · BMP</strong> (entrada también GIF · TIFF · ICO · SVG · HEIC)</p>
+    <p class="privacy" aria-label="Aviso de privacidad">
+      <span class="dot" aria-hidden="true"></span>
+      100% local · Tus archivos nunca salen de tu equipo
+    </p>
+  </header>
+
+  <main class="container">
+    <section class="controls" aria-label="Configuración de conversión">
+      <div class="control-group">
+        <label for="format">Formato de salida</label>
+        <select id="format">
+          <option value="image/webp" selected>WebP (.webp)</option>
+          <option value="image/avif">AVIF (.avif)</option>
+          <option value="image/jpeg">JPG (.jpg)</option>
+          <option value="image/png">PNG (.png)</option>
+          <option value="image/bmp">BMP (.bmp)</option>
+          <option value="image/gif">GIF (.gif)</option>
+          <option value="image/x-icon">ICO (.ico)</option>
+          <option value="image/tiff">TIFF (.tiff)</option>
+          <option value="image/jxl">JPEG XL (.jxl)</option>
+        </select>
+      </div>
+
+      <div class="control-group" id="quality-group">
+        <label for="quality">
+          Calidad <output id="quality-value">0.80</output>
+        </label>
+        <input type="range" id="quality" min="0.1" max="1.0" step="0.05" value="0.8">
+      </div>
+
+      <div class="control-group" id="bg-group" hidden>
+        <label for="bg-color">
+          Fondo (transparencia)
+          <span class="bg-hint">para JPG/BMP</span>
+        </label>
+        <input type="color" id="bg-color" value="#ffffff">
+      </div>
+    </section>
+
+    <section id="dropzone" class="dropzone" tabindex="0" aria-label="Zona de arrastre de archivos">
+      <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p class="dropzone-text">
+        Arrastra imágenes aquí o
+        <button type="button" class="link-button" id="browse">selecciónalas</button>
+      </p>
+      <p class="dropzone-hint">Múltiples archivos · Cualquier formato de imagen</p>
+      <input type="file" id="file-input" multiple accept="image/*" hidden>
+    </section>
+
+    <div id="warning" class="warning" hidden role="alert"></div>
+
+    <section class="actions" hidden id="actions">
+      <button id="convert" class="btn btn-primary">Convertir todo</button>
+      <button id="save-all" class="btn btn-secondary" disabled>Guardar todo</button>
+      <button id="clear" class="btn btn-ghost">Limpiar lista</button>
+    </section>
+
+    <section id="file-list" class="file-list" hidden aria-live="polite"></section>
+  </main>
+
+  <footer class="footer">
+    <p>Web Worker · OffscreenCanvas · File System Access API · Vanilla JS</p>
+  </footer>
+
+  <template id="file-item-template">
+    <article class="file-item">
+      <div class="file-thumb" aria-hidden="true">
+        <img alt="" loading="lazy">
+      </div>
+      <div class="file-info">
+        <p class="file-name"></p>
+        <p class="file-meta">
+          <span class="file-size-original"></span>
+          <span class="file-arrow" hidden>→</span>
+          <span class="file-size-new"></span>
+          <span class="file-savings"></span>
+        </p>
+        <div class="file-progress" aria-hidden="true">
+          <div class="file-progress-bar"></div>
+        </div>
+        <p class="file-status">Esperando…</p>
+      </div>
+      <button class="file-action file-download" hidden aria-label="Descargar archivo convertido">↓</button>
+      <button class="file-action file-remove" aria-label="Quitar de la lista">×</button>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
